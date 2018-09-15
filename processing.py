@@ -49,6 +49,23 @@ def pull_boundaries(point_data, boundary_path, boundary_name, horiz = 1, vert = 
 
 	return point_data
 
+def pull_counties_and_ntas(point_data, time0, pull_counties = True):
+	""" Pulls counties and ntas point data. A wrapper for pull_boundaries function"""
+
+	# Turn into gdf
+	print("Parsing geometry at time {}".format(time.time() - time0))
+	point_data = lat_long_to_gdf(point_data)
+	# Add nta/county location
+	point_data = pull_boundaries(point_data, nta_boundaries_path, 'ntacode', horiz = 2, vert = 2)
+	print('Finished with ntacodes at time {}'.format(time.time() - time0))
+
+	if pull_counties:
+		point_data = pull_boundaries(point_data, county_boundaries_path, 'NAME', horiz = 4, vert = 4)
+		print('Finished with counties at time {}'.format(time.time() - time0))
+
+	return point_data
+
+
 
 
 # Start with 311 dataset ----------------------------------------------------------
@@ -91,16 +108,10 @@ def process_requests_data(path = requests_path, test = False, output_path = 'dat
 	requests_data['resolution_time'] = (requests_data['resolution_date'] - requests_data['created_date']).apply(lambda x: x.days) # NaN for Open
 
 	# Clean interactions between status and response/resolution
-	requests_data.loc[requests_data.loc['closed_date'].notnull(), 'Status'] = 'Closed' # If it's closed, it's closed
+	requests_data.loc[requests_data['closed_date'].notnull(), 'Status'] = 'Closed' # If it's closed, it's closed
 
-	# Turn into gdf
-	print("Parsing geometry at time {}".format(time.time() - time0))
-	requests_data = lat_long_to_gdf(requests_data)
-	# Add nta/county location
-	requests_data = pull_boundaries(requests_data, nta_boundaries_path, 'ntacode', horiz = 2, vert = 2)
-	print('Finished with ntacodes at time {}'.format(time.time() - time0))
-	requests_data = pull_boundaries(requests_data, county_boundaries_path, 'NAME', horiz = 4, vert = 4)
-	print('Finished with counties at time {}'.format(time.time() - time0))
+	# Pull counties and nta
+	requests_data = pull_counties_and_ntas(requests_data, time0)
 
 	if output_path is not None:
 		save_data = requests_data[[col for col in requests_data.columns if col != 'geometry']]
@@ -108,5 +119,28 @@ def process_requests_data(path = requests_path, test = False, output_path = 'dat
 
 	return requests_data
 
+def process_inspection_data(path = inspections_path, test = False, output_path = 'data/cleaned/cleaned_inspections.csv'):
+	""" Processes food venue inspection data """
+
+	time0 = time.time()
+
+	if test:
+		inspections_data = pd.read_csv(path, engine='python', nrows = 10000)
+	else:
+		inspections_data = pd.read_csv(path, engine='python')
+
+
+	inspections_data = inspections_data.drop_duplicates(['facility', 'address', 'inspection_date'])
+	inspections_data = pull_counties_and_ntas(inspections_data, time0, pull_counties = False)
+
+	if output_path is not None:
+		save_data = inspections_data[[col for col in inspections_data.columns if col != 'geometry']]
+		save_data.to_csv(output_path)
+
+	return inspections_data
+
+
 if __name__ == '__main__':
-	process_requests_data(test = True)
+
+	process_inspection_data(test = False)
+	#process_requests_data(test = False)
