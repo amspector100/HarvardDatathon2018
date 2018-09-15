@@ -118,7 +118,7 @@ def process_requests_data(path = requests_path, test = False, output_path = 'dat
 
     return requests_data
 
-def process_inspection_data(fpath, output_path='data/cleaned/inspection_ratio.csv', cleaned_path='data/cleaned/cleaned_inspections.csv'):
+def process_inspection_data(fpath, output_path='data/cleaned/inspection_ratio.csv', cleaned_path='data/cleaned/cleaned_inspections.csv', trimming=False):
     data_311_fpath = 'data/cleaned/cleaned_311.csv'
     data_311 = pd.read_csv(data_311_fpath)
 
@@ -150,8 +150,11 @@ def process_inspection_data(fpath, output_path='data/cleaned/inspection_ratio.cs
         else:
             zip_calls[zipcode] = row_data[1]["RECORD DATE"] / zip_calls[zipcode]
 
-    ratio_data = pd.DataFrame.from_dict(zip_calls, orient='index')
-    ratio_data.columns = ['Inspection to Calls Ratio']
+    if trimming:
+        zip_calls = {k: v for (k,v) in zip_calls.items() if v<=1}
+
+    ratio_data = pd.Series(zip_calls)
+    print(type(ratio_data))
 
     if output_path is not None:
         ratio_data.to_csv(output_path)
