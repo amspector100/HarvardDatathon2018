@@ -10,7 +10,9 @@ nyc_long = -74.006
 
 def plot_nta_boundaries(save_path = 'plots/interactive.html'):
 
+	# Read in data and simplify (very complex) boundaries a little bit to reduce file size
 	boundary_data = gpd.read_file(nta_boundaries_path)
+	boundary_data['geometry'] = boundary_data['geometry'].simplify(tolerance = 0.0005)
 
 	basemap = folium.Map([nyc_lat, nyc_long],
                      zoom_start=11)	
