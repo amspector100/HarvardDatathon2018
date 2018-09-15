@@ -69,7 +69,7 @@ def make_marker_cluster(gdf, make_centroids = True, points_column = 'geometry', 
         points_column = 'centroids'
 
     # Retrieve points and make markercluster
-    points = [utilities.simple.retrieve_coords(point) for point in gdf[points_column]]
+    points = [retrieve_coords(point) for point in gdf[points_column]]
 
     if fast:
         marker = FastMarkerCluster(points, **kwargs)
@@ -150,7 +150,7 @@ def categorical_choropleth(gdf, factor, colors = None, quietly = False, weight =
     # Get colors
     if colors is None:
         colors = plt.cm.tab10(np.linspace(0, 1, len(values)))
-        colors = [utilities.simple.convert_to_hex(color) for color in colors]
+        colors = [convert_to_hex(color) for color in colors]
     elif len(colors) < len(values):
         raise IndexError('In categorical_choropleth call, the "colors" input has fewer colors than the data has unique values')
 
@@ -278,12 +278,12 @@ def heatmap(gdf, geometry_column = 'geometry', with_time = False, time_column = 
         time_periods = sorted(gdf[time_column].unique().tolist())
         for time_period in time_periods:
             points = gdf.loc[gdf[time_column] == time_period, geometry_column]
-            points = [utilities.simple.retrieve_coords(point) for point in points]
+            points = [retrieve_coords(point) for point in points]
             all_points.append(points)
         result = HeatMapWithTime(all_points, index = time_periods, **kwargs)
 
     else:
-        points = [utilities.simple.retrieve_coords(point) for point in gdf[geometry_column]]
+        points = [retrieve_coords(point) for point in gdf[geometry_column]]
         result = HeatMap(points, **kwargs)
 
 
