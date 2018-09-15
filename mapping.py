@@ -1,0 +1,1 @@
+from folext import choropleth
