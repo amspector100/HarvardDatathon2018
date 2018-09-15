@@ -9,3 +9,5 @@ HealthData.gov, State of New York: "Cancer Mapping Data: 2011-2015." New York St
 Frank Winters, New York GIS Department, "New York State Civil Boundaries." http://gis.ny.gov/gisdata/inventories/details.cfm?DSID=927
 
 NYC Food Service--https://www.kaggle.com/new-york-city/nyc-inspections
+
+American Community Survey. "NYC Demographic, Housing, Economic, Housing Data." New York City Planning Commission. 2016. https://www1.nyc.gov/site/planning/data-maps/nyc-population/american-community-survey.page
