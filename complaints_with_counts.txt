@@ -2,44 +2,12 @@ Water System                     526705
 Dirty Conditions                 283516
 Sanitation Condition             241938
 Rodent                           212545
-Food Establishment                66151
 Air Quality                       60458
 Indoor Air Quality                37548
-Food Poisoning                    24652
 Hazardous Materials               21966
 Asbestos                          16319
-Smoking                           15090
 Drinking                          10823
 Water Quality                      9686
 Mold                               2644
-Annual Inspection                  2316
-Animal                             1425
-Drinking Water                      873
-Damaged or Dead Tree                449
-BBQ Outside Authorized Area         175
-Health                              164
-Calorie Labeling                    126
-Annual/ Cycle Inspection            117
-Trans Fat                            28
-Animal Waste                         26
-Illegal Animal - Sold/Kept           22
-Baby Formula                         16
-Garbage or Litter                    14
-Illegal Pet - Sold/Kept              12
-DORIS Literature Request             10
-Graffiti or Vandalism                10
-Grass/Weeds                           8
-Healthcare Facilities                 6
-Injured Wildlife                      6
-Hazardous Conditions                  5
-Employee Behavior                     4
-DOHMH Literature Request              4
-General Question                      4
-Homebound Evacuation 4                2
-Killing/Trapping Pigeon               2
-MOLD                                  1
-Health and Safety                     1
-CFC Recovery                          1
-Animal unsanitary condition           1
-Biking/Rollerblading Off Path         1
+
 Name: complaint_type, dtype: int64

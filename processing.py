@@ -120,6 +120,4 @@ def process_requests_data(path = requests_path, test = False, output_path = 'dat
 
 
 if __name__ == '__main__':
-
-	process_inspection_data(test = True)
-	#process_requests_data(test = False)
+	pass

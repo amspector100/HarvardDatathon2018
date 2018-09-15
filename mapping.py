@@ -29,12 +29,16 @@ def plot_nta_boundaries(save_path = 'plots/interactive.html'):
 	request_data['closed_flag'] = request_data['status'].apply(lambda x: x == 'Closed')
 	boundary_data['closure_rate'] = 100*request_data.groupby(['ntacode'])['closed_flag'].mean()
 
-	# Add layer for closure dates
-
 
 	choropleth.continuous_choropleth(boundary_data, factor = 'closure_rate', layer_name = '311 Service Request Closure Rate', quants = None, 
 									 basemap = basemap)
 
+	# Add layer for response times
+	request_data = request_data.loc[request_data['response_time'].notnull()]
+	boundary_data['mean_response_time'] = request_data.groupby(['ntacode'])['response_time'].mean()
+
+	choropleth.continuous_choropleth(boundary_data, factor = 'mean_response_time', layer_name = '311 Service Request Response Time', quants = None, 
+									 basemap = basemap)
 
 	folium.TileLayer('cartodbdark_matter').add_to(basemap)
 	folium.LayerControl().add_to(basemap)
